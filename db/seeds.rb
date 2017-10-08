@@ -8,11 +8,9 @@
 require 'csv'
 
 csv_text_character = File.read(Rails.root.join('lib', 'seeds', 'objects.csv'))
-
 csv_objects = CSV.parse(csv_text_character, :headers => true, :encoding => 'ISO-8859-1')
-
-csv_objects.each do |row|
-
+csv_objects.each_with_index do |row, index|
+  puts row['object_image_url']
   obj = LanguageObject.new
   obj.submitted_by = row['submitted_by']
   obj.image_url = row['object_image_url']
@@ -21,7 +19,10 @@ csv_objects.each do |row|
   obj.community_group = row['object_community_group']
   obj.category = row['object_category']
   obj.trust_rating = row['trust_rating']
-  obj.save
+  if index < 18
+    obj.save
+  end
+
 end
 
 puts "There are now #{LanguageObject.count} object rows in the transactions table"
